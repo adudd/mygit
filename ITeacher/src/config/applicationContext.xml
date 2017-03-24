@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:context="http://www.springframework.org/schema/context" 
+    xmlns:tx="http://www.springframework.org/schema/tx" 
+    xmlns:mvc="http://www.springframework.org/schema/mvc"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans  
+     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+     http://www.springframework.org/schema/context  
+   	 http://www.springframework.org/schema/context/spring-context-3.0.xsd 
+   	 http://www.springframework.org/schema/tx 
+   	 http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+     http://www.springframework.org/schema/mvc  
+     http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+     http://mybatis.org/schema/mybatis-spring 
+     http://mybatis.org/schema/mybatis-spring.xsd ">
+       
+     
+    
+     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">  
+      <!--<property name="driverClassName" value="${driverClassName}" />  
+       <property name="url" value="${url}" />  
+       <property name="username" value="${username}" />  
+       <property name="password" value="${password}" />  -->
+       <property name="driverClassName" value="com.mysql.jdbc.Driver" />  
+       <property name="url" value="jdbc:mysql://localhost:3306/test?useUnicode=true&amp;characterEncoding=UTF-8" />  
+       <property name="username" value="root" />  
+       <property name="password" value="root" />
+    </bean>  
+    
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="mapperLocations" value="classpath*:com/sj/ilaoshi/mappers/*.xml" />
+		<!-- mybatis配置文件位置 -->
+		<property name="configLocation" value="classpath:config/mybatis-config.xml" /> 
+	</bean>
+	 <!--MapperScannerConfigurer自动扫描将Mapper接口生成代理注入到Spring  -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+	 	<!-- 映射器接口文件的包路径， -->
+		<property name="basePackage" value="com.sj.ilaoshi.dao"></property>				
+	</bean>
+ 	
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean> 
+	
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	<tx:annotation-driven transaction-manager="txManager" />
+	
+	<!-- <context:annotation-config/>  -->
+	
+	<mvc:annotation-driven />
+	
+	
+	<!-- 设置使用注解的类所在的包 -->
+	<context:component-scan base-package="com.sj.ilaoshi" />
+
+	
+	
+	
+	<mvc:resources mapping="/rescoure/images/**" location="/rescoure/images/" />
+	<mvc:resources mapping="/rescoure/js/**" location="/rescoure/js/" />
+	<mvc:resources mapping="/rescoure/css/**" location="/rescoure/css/" />
+</beans>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>main.html</title>
+	
+    <meta name="keywords" content="keyword1,keyword2,keyword3">
+    <meta name="description" content="this is my page">
+    <meta name="content-type" content="text/html; charset=UTF-8">
+    
+    <script type="text/javascript" src="resources/js/jquery.min.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function() {
+  		$(".btn").click(function(){
+  			
+			$.ajax({
+				type: "post",
+				url:"user/find.action",
+				
+				success: function(data){				 
+					  var d = eval("(" + data + ")");
+					  if(d.code=="10000"){
+						  alert(d.msg);
+						  window.location.href='index.html';
+					  }else{
+						alert(data);
+					  }
+					  
+					
+				  }
+			});
+			
+			
+		});
+  	});
+	
+	</script>
+  </head>
+  
+  <body>
+     <button class="btn btn-default">查询</button>
+  </body>
+</html>
